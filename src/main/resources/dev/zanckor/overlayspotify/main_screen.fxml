@@ -1,0 +1,56 @@
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="272.0" prefWidth="544.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.zanckor.overlayspotify.client.MainScreenController">
+    <top>
+        <Pane fx:id="barTitle" onMouseClicked="#clickOnPane" onMouseDragged="#movePane" prefHeight="26.0" prefWidth="424.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+            <children>
+                <Button fx:id="btClose" layoutX="522.0" layoutY="1.0" mnemonicParsing="false" onAction="#closeScreen" onMouseEntered="#closeBtRed" onMouseExited="#btBlack" prefHeight="3.0" prefWidth="22.0" style="-fx-background-color: black;" text="x" textAlignment="CENTER" textFill="WHITE" />
+                <Button fx:id="btMinimize" layoutX="501.0" layoutY="1.0" mnemonicParsing="false" onAction="#minimizeScreen" onMouseEntered="#minimizeBtGray" onMouseExited="#btBlack" prefHeight="14.0" prefWidth="21.0" style="-fx-background-color: black;" text="_" textFill="WHITE" />
+                <Button fx:id="sync" mnemonicParsing="false" onAction="#startLyrics" style="-fx-background-color: black;" text="Sync" textFill="WHITE" />
+            </children>
+        </Pane>
+    </top>
+
+    <center>
+        <BorderPane prefHeight="200.0" prefWidth="546.0" style="-fx-background-color: #101010;" BorderPane.alignment="CENTER">
+            <center>
+                <Pane prefHeight="200.0" prefWidth="544.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <Text fx:id="currentLyrics" fill="WHITE" layoutX="0" layoutY="68.0" strokeWidth="0.0" text="Current Line" textAlignment="CENTER">
+                            <font>
+                                <Font name="System Bold" size="30.0" />
+                            </font>
+                        </Text>
+                        <Text fx:id="nextLine" fill="WHITE" layoutX="0" layoutY="151.0" opacity="0.55" strokeType="OUTSIDE" strokeWidth="0.0" text="Next Line" textAlignment="CENTER">
+                            <font>
+                                <Font name="System Bold" size="26.0" />
+                            </font>
+                        </Text>
+                        <Button fx:id="nextSong" layoutX="489.0" layoutY="192.0" mnemonicParsing="false" onAction="#nextSong" prefHeight="8.0" prefWidth="16.0" style="-fx-background-color: #101010;" text="⏭" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="22.0" />
+                            </font>
+                        </Button>
+                        <Button fx:id="pauseSong" layoutX="447.0" layoutY="192.0" mnemonicParsing="false" onAction="#pauseSong" prefHeight="13.0" prefWidth="19.0" style="-fx-background-color: #101010;" text="⏯" textFill="#dfdfdf">
+                            <font>
+                                <Font name="System Bold" size="22.0" />
+                            </font>
+                        </Button>
+                        <Button fx:id="prevSong" layoutX="400.0" layoutY="192.0" mnemonicParsing="false" onAction="#prevSong" prefHeight="15.0" prefWidth="9.0" style="-fx-background-color: #101010;" text="⏮" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="22.0" />
+                            </font>
+                        </Button>
+                    </children>
+                </Pane>
+            </center>
+        </BorderPane>
+    </center>
+</BorderPane>
