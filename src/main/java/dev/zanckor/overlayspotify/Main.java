@@ -16,6 +16,7 @@ import java.net.URISyntaxException;
 
 public class Main extends Application {
     public static Text currentLyric;
+    public static Text prevLyric;
     public static Text nextLyric;
     public static EventHandler eventHandler = null;
 
@@ -35,6 +36,10 @@ public class Main extends Application {
         currentLyric = (Text) scene.lookup("#currentLyrics");
         currentLyric.setWrappingWidth(540);
         currentLyric.setTextAlignment(TextAlignment.CENTER);
+
+        prevLyric = (Text) scene.lookup("#prevLine");
+        prevLyric.setWrappingWidth(540);
+        prevLyric.setTextAlignment(TextAlignment.CENTER);
 
         nextLyric = (Text) scene.lookup("#nextLine");
         nextLyric.setWrappingWidth(540);

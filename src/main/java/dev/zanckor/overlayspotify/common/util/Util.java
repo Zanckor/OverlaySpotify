@@ -5,10 +5,12 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Util {
+    public static ScheduledExecutorService executorService;
+
     public static void runnableTasks(ParameterFunction function, long period) {
         Runnable runnableTask = function::run;
 
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(runnableTask, 0, period, TimeUnit.SECONDS);
+        executorService = Executors.newScheduledThreadPool(1);
+        executorService.scheduleAtFixedRate(runnableTask, 0, period, TimeUnit.SECONDS);
     }
 }

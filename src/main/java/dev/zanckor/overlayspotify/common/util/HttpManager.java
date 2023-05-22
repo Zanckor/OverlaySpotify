@@ -29,9 +29,13 @@ public class HttpManager {
             }
         }
 
-        String response = IOUtils.toString(http.getInputStream(), StandardCharsets.UTF_8);
-        http.disconnect();
+        if(http.getResponseMessage().equals("OK")) {
+            String response = IOUtils.toString(http.getInputStream(), StandardCharsets.UTF_8);
+            http.disconnect();
 
-        return response;
+            return response;
+        }
+
+        return null;
     }
 }

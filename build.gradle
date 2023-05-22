@@ -26,14 +26,28 @@ tasks.withType(JavaCompile) {
 
 application {
     mainModule = 'dev.zanckor.overlayspotify'
-    mainClass = 'dev.zanckor.overlayspotify.HelloApplication'
+    mainClassName = 'dev.zanckor.overlayspotify.Main'
+    mainClass = 'dev.zanckor.overlayspotify.Main'
 }
+
+mainClassName = 'dev.zanckor.overlayspotify.Main'
 
 javafx {
     version = '17.0.2'
     modules = ['javafx.controls', 'javafx.fxml']
 }
 
+jar {
+    duplicatesStrategy = 'exclude'
+
+    manifest {
+        attributes 'Main-Class': 'dev.zanckor.overlayspotify.Main'
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
 dependencies {
     implementation 'se.michaelthelin.spotify:spotify-web-api-java:8.0.0'
     implementation 'commons-io:commons-io:2.11.0'

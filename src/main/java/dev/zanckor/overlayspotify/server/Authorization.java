@@ -6,6 +6,7 @@ import com.sun.net.httpserver.HttpServer;
 import dev.zanckor.overlayspotify.common.data.Data;
 import dev.zanckor.overlayspotify.common.util.HttpManager;
 import se.michaelthelin.spotify.Base64;
+import se.michaelthelin.spotify.SpotifyApi;
 
 import java.awt.*;
 import java.io.IOException;
@@ -63,5 +64,6 @@ public class Authorization {
 
         Data.accessToken = accessToken;
         Data.refreshToken = refreshToken;
+
     }
 }

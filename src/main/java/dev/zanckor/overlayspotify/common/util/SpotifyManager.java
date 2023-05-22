@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import dev.zanckor.overlayspotify.common.event.ClientEventHandler;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -35,12 +34,14 @@ public class SpotifyManager {
             throw new RuntimeException(ex);
         }
     }
+
     public static String getSongName() {
         JsonObject songData = simpleBearerMessage("https://api.spotify.com/v1/me/player/currently-playing");
 
         JsonObject album = songData.get("item").getAsJsonObject();
         return album.get("name").getAsString();
     }
+
     public static List<String> getSongArtist() {
         JsonObject songData = simpleBearerMessage("https://api.spotify.com/v1/me/player/currently-playing");
 
@@ -55,12 +56,18 @@ public class SpotifyManager {
 
         return artistNames;
     }
+
     public static String getSongUrl() {
         JsonObject songData = simpleBearerMessage("https://api.spotify.com/v1/me/player/currently-playing");
-        JsonObject album = songData.get("item").getAsJsonObject();
 
-        String spotifyUrl = album.get("external_urls").getAsJsonObject().get("spotify").getAsString();
-        return spotifyUrl;
+        if (!songData.get("item").isJsonNull()) {
+            JsonObject album = songData.get("item").getAsJsonObject();
+
+            String spotifyUrl = album.get("external_urls").getAsJsonObject().get("spotify").getAsString();
+            return spotifyUrl;
+        }
+
+        return null;
     }
 
 
@@ -70,22 +77,32 @@ public class SpotifyManager {
         return songData.get("progress_ms").getAsInt();
     }
 
-    public static void currentSongLyrics() throws IOException {
+    public static boolean currentSongLyrics() throws IOException {
         String url = "https://spotify-lyric-api.herokuapp.com/?url=" + SpotifyManager.getSongUrl() + "&format=lrc";
 
         String response = HttpManager.httpRequest(url, "GET", null, null);
-        JsonObject jsonSongData = JsonParser.parseString(response).getAsJsonObject();
-        songLyrics = jsonSongData.get("lines").getAsJsonArray();
+
+        if (response != null) {
+            JsonObject jsonSongData = JsonParser.parseString(response).getAsJsonObject();
+
+            songLyrics = jsonSongData.get("lines").getAsJsonArray();
+            return true;
+        }
+
+        songLyrics = null;
+        return false;
     }
 
     public static String getLyricsPerLine(int currentSecond, int lineOffset) {
         AtomicReference<String> text = new AtomicReference<>();
         AtomicInteger lineIndex = new AtomicInteger();
-        if(songLyrics == null) {
+        if (songLyrics == null) {
             try {
-                SpotifyManager.currentSongLyrics();
+                if (!SpotifyManager.currentSongLyrics()) {
+                    return lineOffset == 0 ? "This song has no lyrics available in Spotify!" : "";
+                }
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                return lineOffset == 0 ? "This song has no lyrics available in Spotify!" : "";
             }
         }
 
@@ -102,8 +119,12 @@ public class SpotifyManager {
                 int lineLRC = Math.toIntExact((date.getTime() - reference.getTime()) / 1000);
 
                 if (currentSecond / 1000 == lineLRC) {
-                    JsonElement lyrics = songLyrics.get(lineIndex.get() + lineOffset).getAsJsonObject().get("words");
-                    text.set(lyrics.getAsString());
+                    int searchingLine = lineIndex.get() + lineOffset;
+                    if (searchingLine > -1 && searchingLine < songLyrics.size() && songLyrics.get(searchingLine) != null) {
+
+                        JsonElement lyrics = songLyrics.get(searchingLine).getAsJsonObject().get("words");
+                        text.set(lyrics.getAsString());
+                    }
                 }
 
                 lineIndex.getAndIncrement();

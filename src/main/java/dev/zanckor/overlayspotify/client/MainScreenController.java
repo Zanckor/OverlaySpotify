@@ -1,16 +1,16 @@
 package dev.zanckor.overlayspotify.client;
 
-import dev.zanckor.overlayspotify.Main;
 import dev.zanckor.overlayspotify.common.event.ClientEventHandler;
 import dev.zanckor.overlayspotify.common.util.SpotifyManager;
-import dev.zanckor.overlayspotify.common.util.Util;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 import static dev.zanckor.overlayspotify.Main.eventHandler;
 
@@ -20,20 +20,11 @@ public class MainScreenController {
     @FXML
     private Button btMinimize;
     @FXML
-    private Button nextSong;
-    @FXML
-    private Button prevSong;
-    @FXML
-    private Button pauseSong;
-    @FXML
     private Button sync;
     @FXML
     private Pane barTitle;
     @FXML
-    private Text currentLyrics;
-
-    double xOffset;
-    double yOffset;
+    private ImageView imageBackground;
 
     @FXML
     protected void closeScreen(ActionEvent e) {
@@ -49,19 +40,11 @@ public class MainScreenController {
     }
 
     @FXML
-    public void clickOnPane(MouseEvent mouseEvent) {
-        Stage stage = (Stage) barTitle.getScene().getWindow();
-
-        xOffset = stage.getX() - mouseEvent.getScreenX();
-        yOffset = stage.getY() - mouseEvent.getScreenY();
-    }
-
-    @FXML
     public void movePane(MouseEvent mouseEvent) {
         Stage stage = (Stage) barTitle.getScene().getWindow();
 
-        stage.setX(mouseEvent.getScreenX() + xOffset);
-        stage.setY(mouseEvent.getScreenY() + yOffset);
+        stage.setX(mouseEvent.getScreenX() - 255);
+        stage.setY(mouseEvent.getScreenY());
     }
 
     @FXML
@@ -89,17 +72,13 @@ public class MainScreenController {
         eventHandler.startTicker();
     }
 
-
     @FXML
-    public void nextSong(ActionEvent actionEvent) {
+    public void reloadSong(ActionEvent actionEvent) throws IOException {
+        ClientEventHandler.currentSongSecond = SpotifyManager.getSongCurrentMS();
+        SpotifyManager.currentSongLyrics();
     }
 
-    @FXML
-    public void pauseSong(ActionEvent actionEvent) {
-    }
-
-    @FXML
-    public void prevSong(ActionEvent actionEvent) {
-
+    public void changeBG(ActionEvent actionEvent) {
+        imageBackground.setVisible(!imageBackground.isVisible());
     }
 }
